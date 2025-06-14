@@ -10,10 +10,15 @@ services:
 
   mongo:
     image: mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongodb:/data/db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
 
 volumes:
   mongodb:

@@ -1,18 +1,22 @@
-# Notes API 
+# Notes App
 
-This is a Dockerized Node.js + MongoDB Notes API built with Express and Mongoose.
+A full-stack Dockerized Notes application built with **Node.js**, **Express**, **MongoDB**, and a static **HTML frontend** served via **Nginx**. Notes can be created, viewed, auto-refreshed, and deleted — with timestamps!
 
 ## Features
-- REST API for adding and retrieving notes
-- MongoDB for data storage
-- Docker + Docker Compose for easy setup
 
-## Getting Started
+- REST API with Express + Mongoose
+- MongoDB for persistent storage
+- HTML frontend with:
+  - Note creation form
+  - Auto-refresh every 5 seconds
+  - Note deletion 🗑
+  - Timestamps ⏰
+- 🐳 Docker + Docker Compose for containerized setup
 
-```bash
-docker-compose up --build
+## Tech Stack
 
-Then test:
-
-curl -X POST http://localhost:3000 -H "Content-Type: application/json" -d '{"text": "Hello Docker!"}'
-curl http://localhost:3000
+Node.js + Express
+MongoDB + Mongoose
+HTML + JS (Vanilla)
+Nginx (for static frontend)
+Docker + Docker Compose

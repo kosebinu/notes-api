@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notes App</title>
+</head>
+<body>
+  <h1>Notes</h1>
+  <form id="note-form">
+    <input type="text" id="note-input" placeholder="Write a note" required />
+    <button type="submit">Save Note</button>
+  </form>
+
+  <ul id="notes-list"></ul>
+
+  <script>
+    async function loadNotes() {
+      try {
+        const res = await fetch('http://localhost:3000');
+        const notes = await res.json();
+        console.log('Loaded notes:', notes); // ✅ Debug
+        document.getElementById('notes-list').innerHTML =
+          notes.map(n => `
+            <li>
+              ${n.text}
+              <small>(${n.createdAt ? new Date(n.createdAt).toLocaleString() : ''})</small>
+              <button onclick="deleteNote('${n._id}')">🗑</button>
+            </li>
+          `).join('');
+      } catch (err) {
+        console.error('Error loading notes:', err);
+      }
+    }
+
+    async function deleteNote(id) {
+      try {
+        const res = await fetch(`http://localhost:3000/${id}`, {
+          method: 'DELETE'
+        });
+        console.log('Deleted note:', id); // ✅ Debug
+        loadNotes();
+      } catch (err) {
+        console.error('Delete failed:', err);
+      }
+    }
+
+    document.getElementById('note-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = document.getElementById('note-input').value;
+      console.log('Submitting note:', text); // ✅ Debug
+
+      try {
+        const response = await fetch('http://localhost:3000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        const data = await response.text();
+        console.log('Server response:', data); // ✅ Debug
+      } catch (err) {
+        console.error('POST failed:', err);
+      }
+
+      document.getElementById('note-input').value = '';
+      loadNotes(); 
+    });
+
+    loadNotes();
+    setInterval(loadNotes, 5000); 
+  </script>
+</body>
+</html>
